@@ -8,38 +8,37 @@ import PeoplePage from "./components/pages/PeoplePage";
 import PlanetsPage from "./components/pages/PlanetsPage";
 import StarshipsPage from "./components/pages/StarshipsPage";
 import PeopleForm from "./components/PeopleForm";
+import PlanetsForm from "./components/PlanetsForm";
 import Navbar from "./components/Navbar";
 import NotFound from "./components/pages/NotFound";
 import {getPeople} from "./services/peopleService";
+import {getPlanets} from "./services/planetsService";
+import {getSpaceships} from "./services/spaceshipsService";
 
 function App() {
     const [people, setPeople] = useState([]);
+    const [planets, setPlanets] = useState([]);
+    const [spaceships, setSpaceships] = useState([]);
 
     useEffect( () => {
-        const getData = async () => {
+        const getPeopleData = async () => {
             const peopleResponse = await getPeople()
             setPeople(peopleResponse)
         }
+        getPeopleData()
 
-        getData()
+        const getPlanetsData = async () => {
+            const planetsResponse = await getPlanets()
+            setPlanets(planetsResponse)
+        }
+        getPlanetsData()
+
+        const getSpaceshipsData = async () => {
+            const spaceshipsResponse = await getSpaceships()
+            setSpaceships(spaceshipsResponse)
+        }
+        getSpaceshipsData()
     }, [])
-
-    // const getInitialPeopleData = () => {
-    //     return columns.reduce((cols, columnName) => {
-    //         cols[columnName] = "";
-    //         return cols;
-    //     }, {})
-    // }
-
-    // const handleAppPerson = (personData) => {
-    //     const data = [...people, personData];
-    //     setPeople(data)
-    // }
-
-    // const handleDelete = (id) => {
-    //     const filteredPeople = people.filter(person => person.id !== id);
-    //     setPeople(filteredPeople)
-    // }
 
     return (
         <>
@@ -48,8 +47,8 @@ function App() {
                 <Switch>
                     <Route path="/people/:id" render={props => <PeopleForm {...props} setPeople={setPeople} people={people} />}/>
                     <Route path="/people" render={props => <PeoplePage {...props} setPeople={setPeople} people={people} />} />
-                    {/*<Route path="/planets/:id" component={Form}/>*/}
-                    <Route path="/planets" component={PlanetsPage}/>
+                    <Route path="/planets/:id" render={props => <PlanetsForm {...props} setPlanets={setPlanets} planets={planets} />}/>
+                    <Route path="/planets" render={props => <PlanetsPage {...props} setPlanets={setPlanets} planets={planets} />}/>
                     {/*<Route path="/starships/:id" component={Form}/>*/}
                     <Route path="/starships" component={StarshipsPage}/>
                     <Route path="/not-found" component={NotFound}/>
