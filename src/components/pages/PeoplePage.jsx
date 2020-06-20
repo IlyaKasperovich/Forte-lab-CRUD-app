@@ -1,70 +1,66 @@
-import React, {useEffect, useState} from 'react';
-import Table from "../common/Table";
-import Form from "../common/Form";
-import  {getPeople} from "../../services/swApiService";
+import React from 'react';
+import {Link} from "react-router-dom";
+import Table from '../common/Table'
 
-const data = [
-    {first: 'Mark', last: 'Otto', handle: '@motto', id: '1'},
-    {first: 'Carl', last: 'Reno', handle: '@ceno', id: '2'},
-    {first: 'Steve', last: 'Smith', handle: '@ssteve', id: '3'}
-]
-
-const columns = Object.keys(data[0]);
-
-const PeoplePage = () => {
-    const pageName = 'People';
-    const [people, setPeople] = useState([]);
-
-    useEffect( () => {
-        const getData = async () => {
-            const data = await getPeople()
-            console.log(data)
-            setPeople(data)
-        }
-
-        getData()
-    }, [])
-
-    const handleAppPerson = (personData) => {
-        const data = [...people, personData];
-        setPeople(data)
+const PeoplePage = ({people, setPeople }) => {
+    const handleBelovedStatus = id => {
+        const mappedPeople = people.map(person => {
+            return person.id === id ? {...person, beloved: !person.belowed} : person
+        })
+        setPeople(mappedPeople)
     }
 
-    const handleDelete = (id) => {
-        const filteredPeople = people.filter(person => person.id !== id);
+    const handleDelete = id => {
+        const filteredPeople = people.filter(person => person.id !== id)
         setPeople(filteredPeople)
     }
 
-    const getInitialPeopleData = () => {
-        return columns.reduce((cols, columnName) => {
-            cols[columnName] = "";
-            return cols;
-        }, {})
-    }
+    const getColumns = () => {
+        if (!people.length) return [];
 
-    const getColumnNames = () => {
-        if (!people.length) {
-            return []
-        }
-
-        return Object.keys(people[0])
+        return Object.keys(people[0]).map(colName => {
+            if (colName === 'beloved') {
+                return {
+                    colName,
+                    content: ({beloved, id}) => (
+                        <input
+                            type="checkbox"
+                            checked={beloved}
+                            onChange={() => handleBelovedStatus(id)}
+                        />
+                    )
+                }
+            }
+            if (colName === 'name') {
+                return {
+                    colName,
+                    content: ({name, id}) => (
+                        <Link style={{color: '#ffc107'}} to={`/people/${id}`}>{name}</Link>
+                    )
+                }
+            }
+            return {colName}
+        })
     }
 
     return (
-        <>
-            <h2>{pageName} from Star Wars Universe</h2>
+        <div>
+            <h3>People from Star Wars Universe</h3>
+            <Link
+                to={"/people/new"}
+                className="btn btn-warning"
+                style={{marginBottom: 25}}
+            >
+                New Person
+            </Link>
             <Table
-                data={people}
-                columns={getColumnNames()}
-                tableDescriptor={pageName}
+                columns={getColumns()}
+                data={Object.values(people)}
+                tableDescriptor="People"
                 onDelete={handleDelete}
             />
-            <Form
-                initialData={getInitialPeopleData()}
-                columns={getColumnNames()}
-                onAddData={handleAppPerson}
-            />
-        </>
+        </div>
+
     );
 };
 
