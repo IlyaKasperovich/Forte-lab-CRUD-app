@@ -15,6 +15,7 @@ export const getSpaceships = async () => {
         model,
         cost_in_credits,
         hyperdrive_rating,
+        beloved: false,
         id: nanoid()
     }))
 }

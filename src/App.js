@@ -26,20 +26,38 @@ function App() {
             const peopleResponse = await getPeople()
             setPeople(peopleResponse)
         }
-        getPeopleData()
+        JSON.parse(localStorage.people).length
+            ? setPeople(JSON.parse(localStorage.people))
+            : getPeopleData()
 
         const getPlanetsData = async () => {
             const planetsResponse = await getPlanets()
             setPlanets(planetsResponse)
         }
-        getPlanetsData()
+        JSON.parse(localStorage.planets).length
+            ? setPlanets(JSON.parse(localStorage.planets))
+            : getPlanetsData()
 
         const getSpaceshipsData = async () => {
             const spaceshipsResponse = await getSpaceships()
             setSpaceships(spaceshipsResponse)
         }
-        getSpaceshipsData()
+        JSON.parse(localStorage.spaceships).length
+            ? setSpaceships(JSON.parse(localStorage.spaceships))
+            : getSpaceshipsData()
     }, [])
+
+    useEffect( () => {
+        localStorage.people = JSON.stringify(people)
+    },[people])
+
+    useEffect( () => {
+        localStorage.planets = JSON.stringify(planets)
+    },[planets])
+
+    useEffect( () => {
+        localStorage.spaceships = JSON.stringify(spaceships)
+    },[spaceships])
 
     return (
         <>
