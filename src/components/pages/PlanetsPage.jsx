@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import Table from '../common/Table'
 
-const PlanetPage = ({planets, setPlanets }) => {
+const PlanetsPage = ({planets, setPlanets }) => {
     const handleBelovedStatus = id => {
         const mappedPlanets = planets.map(planet => {
             return planet.id === id ? {...planet, beloved: !planet.belowed} : planet
@@ -64,4 +64,4 @@ const PlanetPage = ({planets, setPlanets }) => {
     );
 };
 
-export default PlanetPage;
+export default PlanetsPage;

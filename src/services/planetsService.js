@@ -15,6 +15,7 @@ export const getPlanets = async () => {
         created,
         diameter,
         population,
+        beloved: false,
         id: nanoid()
     }))
 }
