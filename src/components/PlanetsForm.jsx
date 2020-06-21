@@ -30,6 +30,10 @@ const PlanetForm = ({setPlanets, planets, history, match}) => {
             if (!propVal && !propKey.includes('beloved')) {
                 errors = {...errors, [propKey]: 'Field should not be empty'};
             }
+            if ((propKey.includes('diameter') && !isFinite(propVal)) 
+            || (propKey.includes('population') && !isFinite(propVal))){
+                    errors = {...errors, [propKey]: 'Field should be a number'};
+            }
         })
         setFormErrors(errors);
         return errors

@@ -2,8 +2,6 @@
 import React, {useEffect, useState} from 'react';
 import {Route, Switch, Redirect} from "react-router-dom";
 
-import './App.css';
-import "bootstrap/dist/css/bootstrap.css";
 import PeoplePage from "./components/pages/PeoplePage";
 import PlanetsPage from "./components/pages/PlanetsPage";
 import StarshipsPage from "./components/pages/StarshipsPage";
@@ -12,9 +10,13 @@ import PlanetsForm from "./components/PlanetsForm";
 import SpaceshipForm from "./components/SpaceshipsForm";
 import Navbar from "./components/Navbar";
 import NotFound from "./components/pages/NotFound";
+
 import {getPeople} from "./services/peopleService";
 import {getPlanets} from "./services/planetsService";
 import {getSpaceships} from "./services/spaceshipsService";
+
+import './App.css';
+import "bootstrap/dist/css/bootstrap.css";
 
 function App() {
     const [people, setPeople] = useState([]);
@@ -26,25 +28,19 @@ function App() {
             const peopleResponse = await getPeople()
             setPeople(peopleResponse)
         }
-        JSON.parse(localStorage.people).length
-            ? setPeople(JSON.parse(localStorage.people))
-            : getPeopleData()
+        localStorage.people ? setPeople(JSON.parse(localStorage.people)) : getPeopleData()
 
         const getPlanetsData = async () => {
             const planetsResponse = await getPlanets()
             setPlanets(planetsResponse)
         }
-        JSON.parse(localStorage.planets).length
-            ? setPlanets(JSON.parse(localStorage.planets))
-            : getPlanetsData()
+        localStorage.planets ? setPlanets(JSON.parse(localStorage.planets)) : getPlanetsData()
 
         const getSpaceshipsData = async () => {
             const spaceshipsResponse = await getSpaceships()
             setSpaceships(spaceshipsResponse)
         }
-        JSON.parse(localStorage.spaceships).length
-            ? setSpaceships(JSON.parse(localStorage.spaceships))
-            : getSpaceshipsData()
+        localStorage.spaceships ? setSpaceships(JSON.parse(localStorage.spaceships)) : getSpaceshipsData()
     }, [])
 
     useEffect( () => {

@@ -30,6 +30,16 @@ const PeopleForm = ({setPeople, people, history, match}) => {
             if (!propVal && !propKey.includes('beloved')) {
                 errors = {...errors, [propKey]: 'Field should not be empty'};
             }
+            if ((propKey.includes('height') && !isFinite(propVal)) 
+            || (propKey.includes('mass') && !isFinite(propVal))){
+                    errors = {...errors, [propKey]: 'Field should be a number'};
+            }
+            if (propKey.includes('gender')){
+                const allowedValues = ['male', 'female', 'n/a']
+                if (!allowedValues.includes(propVal.toLowerCase())){
+                    errors = {...errors, [propKey]: 'Field should contain one of the following values: male, female, n/a'};
+                }
+            }
         })
         setFormErrors(errors);
         return errors

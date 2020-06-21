@@ -30,6 +30,10 @@ const SpaceshipForm = ({setSpaceships, spaceships, history, match}) => {
             if (!propVal && !propKey.includes('beloved')) {
                 errors = {...errors, [propKey]: 'Field should not be empty'};
             }
+            if ((propKey.includes('cost_in_credits') && !isFinite(propVal)) 
+            || (propKey.includes('hyperdrive_rating') && !isFinite(propVal))){
+                    errors = {...errors, [propKey]: 'Field should be a number'};
+            }
         })
         setFormErrors(errors);
         return errors
