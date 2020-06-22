@@ -3,15 +3,21 @@ import Input from "./common/Input";
 import Button from './common/Button';
 import {nanoid} from "nanoid";
 
-
 import {peopleColumns} from "../services/peopleService";
+
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllPeople } from '../store/selectors/people';
+import { setPeople } from '../store/actions/people';
 
 const initialPersonData = peopleColumns.reduce((columns, columnName) => {
     columns[columnName] = '';
     return columns;
 }, {})
 
-const PeopleForm = ({setPeople, people, history, match}) => {
+const PeopleForm = ({history, match}) => {
+    const dispatch = useDispatch()
+    const people = useSelector(state => getAllPeople(state))
+
     const [formErrors, setFormErrors] = useState({});
     const [personData, setPersonData] = useState({...initialPersonData});
     const [editMode, setEditMode] = useState(false);
@@ -52,12 +58,11 @@ const PeopleForm = ({setPeople, people, history, match}) => {
         if (Object.keys(errors).length) {
             return;
         }
-
         if (editMode) {
             const newPeopleList = people.map(person => person.id === personData.id ? personData : person);
-            setPeople(newPeopleList)
+            dispatch(setPeople(newPeopleList))
         } else {
-            setPeople( people.concat([{...personData, beloved: false, id: nanoid()}]));
+            dispatch(setPeople(people.concat([{...personData, beloved: false, id: nanoid()}])))
         }
         history.push('/')
     }

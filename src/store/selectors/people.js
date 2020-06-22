@@ -1,0 +1,1 @@
+export const getAllPeople = state => state.people.allPeople;

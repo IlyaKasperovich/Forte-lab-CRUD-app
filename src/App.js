@@ -1,4 +1,3 @@
-
 import React, {useEffect, useState} from 'react';
 import {Route, Switch, Redirect} from "react-router-dom";
 
@@ -17,51 +16,60 @@ import {getSpaceships} from "./services/spaceshipsService";
 
 import './App.css';
 import "bootstrap/dist/css/bootstrap.css";
+import { useDispatch } from 'react-redux';
+import { setPeople } from './store/actions/people';
 
 function App() {
-    const [people, setPeople] = useState([]);
+
+    const dispatch = useDispatch()
+
     const [planets, setPlanets] = useState([]);
     const [spaceships, setSpaceships] = useState([]);
+
+
 
     useEffect( () => {
         const getPeopleData = async () => {
             const peopleResponse = await getPeople()
-            setPeople(peopleResponse)
+            dispatch(setPeople(peopleResponse));
         }
-        localStorage.people ? setPeople(JSON.parse(localStorage.people)) : getPeopleData()
+        // localStorage.people ? dispatch(setPeople((JSON.parse(localStorage.people)))) : 
+        getPeopleData()
 
         const getPlanetsData = async () => {
             const planetsResponse = await getPlanets()
             setPlanets(planetsResponse)
         }
-        localStorage.planets ? setPlanets(JSON.parse(localStorage.planets)) : getPlanetsData()
+        // localStorage.planets ? setPlanets(JSON.parse(localStorage.planets)) : 
+        getPlanetsData()
 
         const getSpaceshipsData = async () => {
             const spaceshipsResponse = await getSpaceships()
             setSpaceships(spaceshipsResponse)
         }
-        localStorage.spaceships ? setSpaceships(JSON.parse(localStorage.spaceships)) : getSpaceshipsData()
+        // localStorage.spaceships ? setSpaceships(JSON.parse(localStorage.spaceships)) : 
+        getSpaceshipsData()
     }, [])
 
-    useEffect( () => {
-        localStorage.people = JSON.stringify(people)
-    },[people])
+    // useEffect( () => {
+    //     localStorage.people = JSON.stringify(people)
+    // },[people])
 
-    useEffect( () => {
-        localStorage.planets = JSON.stringify(planets)
-    },[planets])
+    // useEffect( () => {
+    //     localStorage.planets = JSON.stringify(planets)
+    // },[planets])
 
-    useEffect( () => {
-        localStorage.spaceships = JSON.stringify(spaceships)
-    },[spaceships])
+    // useEffect( () => {
+    //     localStorage.spaceships = JSON.stringify(spaceships)
+    // },[spaceships])
 
     return (
         <>
             <Navbar/>
             <div className="container">
                 <Switch>
-                    <Route path="/people/:id" render={props => <PeopleForm {...props} setPeople={setPeople} people={people} />}/>
-                    <Route path="/people" render={props => <PeoplePage {...props} setPeople={setPeople} people={people} />} />
+                    <Route path="/people/:id" render={props => <PeopleForm {...props} />}/>
+                    <Route path="/people" render={props => <PeoplePage {...props} />} />
                     <Route path="/planets/:id" render={props => <PlanetsForm {...props} setPlanets={setPlanets} planets={planets} />}/>
                     <Route path="/planets" render={props => <PlanetsPage {...props} setPlanets={setPlanets} planets={planets} />}/>
                     <Route path="/starships/:id" render={props => <SpaceshipForm {...props} setSpaceships={setSpaceships} spaceships={spaceships} />}/>

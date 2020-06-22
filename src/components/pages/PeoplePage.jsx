@@ -1,18 +1,20 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import Table from '../common/Table'
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllPeople } from '../../store/selectors/people';
+import { deletePerson, changeBelovedStatus } from '../../store/actions/people';
 
-const PeoplePage = ({people, setPeople }) => {
+const PeoplePage = () => {
+    const dispatch = useDispatch()
+    const people = useSelector(state => getAllPeople(state))
+
     const handleBelovedStatus = id => {
-        const mappedPeople = people.map(person => {
-            return person.id === id ? {...person, beloved: !person.belowed} : person
-        })
-        setPeople(mappedPeople)
+        dispatch(changeBelovedStatus(id))
     }
 
     const handleDelete = id => {
-        const filteredPeople = people.filter(person => person.id !== id)
-        setPeople(filteredPeople)
+        dispatch(deletePerson(id))
     }
 
     const getColumns = () => {
