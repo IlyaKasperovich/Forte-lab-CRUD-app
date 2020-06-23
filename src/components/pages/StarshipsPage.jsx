@@ -1,18 +1,20 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import Table from '../common/Table'
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllStarships } from '../../store/selectors/starships';
+import { changeBelovedStatus, deleteStarship } from '../../store/actions/starships';
 
-const StarshipsPage = ({spaceships, setSpaceships }) => {
+const StarshipsPage = () => {
+    const dispatch = useDispatch()
+    const spaceships = useSelector(state => getAllStarships(state))
+
     const handleBelovedStatus = id => {
-        const mappedSpaceships = spaceships.map(spaceship => {
-            return spaceship.id === id ? {...spaceship, beloved: !spaceship.belowed} : spaceship
-        })
-        setSpaceships(mappedSpaceships)
+        dispatch(changeBelovedStatus(id))
     }
 
     const handleDelete = id => {
-        const filteredSpaceships = spaceships.filter(spaceship => spaceship.id !== id)
-        setSpaceships(filteredSpaceships)
+        dispatch(deleteStarship(id))
     }
 
     const getColumns = () => {

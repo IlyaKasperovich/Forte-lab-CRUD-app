@@ -1,0 +1,1 @@
+export const getAllStarships = state => state.starships.allStarships;

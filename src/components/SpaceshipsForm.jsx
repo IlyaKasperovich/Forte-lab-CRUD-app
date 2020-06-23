@@ -3,15 +3,21 @@ import Input from "./common/Input";
 import Button from './common/Button';
 import {nanoid} from "nanoid";
 
-
 import {spaceshipsColumns} from "../services/spaceshipsService";
+
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllStarships } from '../store/selectors/starships';
+import { setStarships } from '../store/actions/starships';
 
 const initialSpaceshipData = spaceshipsColumns.reduce((columns, columnName) => {
     columns[columnName] = '';
     return columns;
 }, {})
 
-const SpaceshipForm = ({setSpaceships, spaceships, history, match}) => {
+const SpaceshipForm = ({history, match}) => {
+    const dispatch = useDispatch()
+    const spaceships = useSelector(state => getAllStarships(state))
+
     const [formErrors, setFormErrors] = useState({});
     const [spaceshipData, setSpaceshipData] = useState({...initialSpaceshipData});
     const [editMode, setEditMode] = useState(false);
@@ -49,9 +55,9 @@ const SpaceshipForm = ({setSpaceships, spaceships, history, match}) => {
 
         if (editMode) {
             const newSpaceshipList = spaceships.map(spaceship => spaceship.id === spaceshipData.id ? spaceshipData : spaceship);
-            setSpaceships(newSpaceshipList)
+            dispatch(setStarships(newSpaceshipList))
         } else {
-            setSpaceships( spaceships.concat([{...spaceshipData, beloved: false, id: nanoid()}]));
+            dispatch(setStarships(spaceships.concat([{...spaceshipData, beloved: false, id: nanoid()}])))
         }
         history.push('/starships')
     }

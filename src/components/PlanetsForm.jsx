@@ -5,13 +5,19 @@ import {nanoid} from "nanoid";
 
 
 import {planetsColumns} from "../services/planetsService";
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllPlanets } from '../store/selectors/planets';
+import { setPlanets } from '../store/actions/planets';
 
 const initialPlanetData = planetsColumns.reduce((columns, columnName) => {
     columns[columnName] = '';
     return columns;
 }, {})
 
-const PlanetForm = ({setPlanets, planets, history, match}) => {
+const PlanetForm = ({history, match}) => {
+    const dispatch = useDispatch()
+    const planets = useSelector(state => getAllPlanets(state))
+
     const [formErrors, setFormErrors] = useState({});
     const [planetData, setPlanetData] = useState({...initialPlanetData});
     const [editMode, setEditMode] = useState(false);
@@ -49,9 +55,9 @@ const PlanetForm = ({setPlanets, planets, history, match}) => {
 
         if (editMode) {
             const newPlanetList = planets.map(planet => planet.id === planetData.id ? planetData : planet);
-            setPlanets(newPlanetList)
+            dispatch(setPlanets(newPlanetList))
         } else {
-            setPlanets( planets.concat([{...planetData, beloved: false, id: nanoid()}]));
+            dispatch(setPlanets(planets.concat([{...planetData, beloved: false, id: nanoid()}])))
         }
         history.push('/planets')
     }

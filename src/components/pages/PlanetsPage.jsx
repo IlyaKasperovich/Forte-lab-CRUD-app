@@ -1,18 +1,20 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import Table from '../common/Table'
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllPlanets } from '../../store/selectors/planets'
+import { changeBelovedStatus, deletePlanet } from '../../store/actions/planets';
 
-const PlanetsPage = ({planets, setPlanets }) => {
+const PlanetsPage = () => {
+    const dispatch = useDispatch()
+    const planets = useSelector(state => getAllPlanets(state))
+
     const handleBelovedStatus = id => {
-        const mappedPlanets = planets.map(planet => {
-            return planet.id === id ? {...planet, beloved: !planet.belowed} : planet
-        })
-        setPlanets(mappedPlanets)
+        dispatch(changeBelovedStatus(id))
     }
 
     const handleDelete = id => {
-        const filteredPlanets = planets.filter(planet => planet.id !== id)
-        setPlanets(filteredPlanets)
+        dispatch(deletePlanet(id))
     }
 
     const getColumns = () => {
